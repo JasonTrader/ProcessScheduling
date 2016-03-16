@@ -47,7 +47,9 @@ public:
     }
   }
 
-  
+  bool isDone(){
+    return bursts.empty();
+  }
 
   unsigned int getWaitTime(unsigned int clockTime){
     return (clockTime - arriv_time) - tot_burst_time
