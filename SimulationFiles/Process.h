@@ -15,9 +15,39 @@ private:
   std::vector<std::pair<string, unsigned int>> bursts;
 
 public:
+
+  Process(int PID, unsigned int arriv_time, std::vector<std::pair<string, unsigned int>> bursts){
+    tot_burst_time = 0;
+    for(int i = 0; i<bursts.size(); i++){
+      tot_burst_time += bursts[i].second;
+    }
+  }
+
   unsigned int getTurnaroundTime(unsigned int clockTime){
     return clockTime - arriv_time;
   }
+
+  unsigned int getBurstTimeLeft(){
+    if(!bursts.empty()){
+      return bursts[0].second;
+    }
+  }
+
+  void decBurstTimeLeft(){
+    if(!bursts.empty()){
+      bursts[0].second -= 1;
+    }
+  }
+
+  void removeFrontBurst(){
+    if(!bursts.empty()){
+      if(bursts[0].first == "CPU"){
+        bursts.erase(bursts.begin());
+      }
+    }
+  }
+
+  
 
   unsigned int getWaitTime(unsigned int clockTime){
     return (clockTime - arriv_time) - tot_burst_time
