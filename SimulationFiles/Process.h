@@ -16,6 +16,8 @@ private:
 
 public:
 
+  bool operator< ()
+
   Process(int PID, unsigned int arriv_time, std::vector<std::pair<string, unsigned int>> bursts){
     tot_burst_time = 0;
     for(int i = 0; i<bursts.size(); i++){
@@ -26,6 +28,11 @@ public:
   unsigned int getTurnaroundTime(unsigned int clockTime){
     return clockTime - arriv_time;
   }
+
+  unsigned int getTotBurst(){
+    return tot_burst_time;
+  }
+
 #pragma region core functions
   unsigned int getBurstTimeLeft(){
     if(!bursts.empty()){
@@ -51,6 +58,8 @@ public:
     return bursts.empty();
   }
 #pragma endregion
+
+
   unsigned int getWaitTime(unsigned int clockTime){
     return (clockTime - arriv_time) - tot_burst_time
   }

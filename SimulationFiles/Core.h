@@ -21,7 +21,7 @@ public:
 	//runs one clock tick for a process argument should be passed as NULL if replacement is not desired
 	Process Update(Process &p) {
 		//new process in, used for pre-emption/replacement
-		if(*p != NULL) { 
+		if(*p != NULL) {
 			m_curr_process = p;
 			m_needs_process = false;
 			return m_curr_process;
