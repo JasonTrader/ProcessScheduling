@@ -16,8 +16,6 @@ private:
 
 public:
 
-  bool operator< ()
-
   Process(int PID, unsigned int arriv_time, std::vector<std::pair<string, unsigned int>> bursts){
     tot_burst_time = 0;
     for(int i = 0; i<bursts.size(); i++){
