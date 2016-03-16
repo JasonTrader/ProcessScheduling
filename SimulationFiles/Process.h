@@ -26,7 +26,7 @@ public:
   unsigned int getTurnaroundTime(unsigned int clockTime){
     return clockTime - arriv_time;
   }
-
+#pragma region core functions
   unsigned int getBurstTimeLeft(){
     if(!bursts.empty()){
       return bursts[0].second;
@@ -50,7 +50,7 @@ public:
   bool isDone(){
     return bursts.empty();
   }
-
+#pragma endregion
   unsigned int getWaitTime(unsigned int clockTime){
     return (clockTime - arriv_time) - tot_burst_time
   }
