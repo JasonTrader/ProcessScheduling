@@ -3,8 +3,11 @@
 
 class ProcessControlBlock {
 private:
-	
+	unsigned int m_completed_processes = 0;
 
+protected:
+
+public:
 
 };
 
