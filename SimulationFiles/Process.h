@@ -23,6 +23,13 @@ public:
     }
   }
 
+  bool operator<(const Process &other) {//compares on arrival time
+    return arriv_time < other.arriv_time;
+  }
+
+  unsigned int getArrivalTime() {
+    return arriv_time;
+  }
   unsigned int getTurnaroundTime(unsigned int clockTime){
     return clockTime - arriv_time;
   }
