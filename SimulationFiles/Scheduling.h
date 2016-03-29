@@ -18,13 +18,14 @@ void runFCFS(std::vector<Process> &procs, Core* core){
 			if (!procs[i].isWaitingIO()) {
 				Process temp = core->Update(procs[i]);
 				procs.erase(procs.begin() + i);
+
+				if (temp != NULL)
+					procs.push_back(temp);
+
 				break;
 			}
 		}
-
-		if (temp != NULL)
-			procs.push_back(temp);
-	} 
+	}
 	else {
 		//the core does not need a process so we pass it null
 		Process temp = core->Update(NULL);
