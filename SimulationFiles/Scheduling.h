@@ -6,25 +6,32 @@
 #include <vector>
 #include <algorithm>
 
-//IMPORTANT: Check all dot and arrow operators because I'm probably using the wrong ones
-
 void runFCFS(std::vector<Process> &procs, Core* core){
-	std::sort(procs->begin(), procs->end());
-    std::queue<Process> arriv_q; //no priority queue because there's no priority to sort on
-    int clock_tick_counter = 0;
-    for(clock_tick_counter; clock_tick_counter<procs.size(); clock_tick_counter++){
-    	while(clock_tick_counter == procs.front().getArrivalTime()) {
-    		arriv_q.push(procs.front());
-    		procs.erase(procs.begin());
-    	}
-    if (!arriv_q.empty()) {
-    	//push a process into the core for x amount of time
-    	//record whatever data we're recording
-    	//do the update function
-    }
-  }
+	//Riley - I took some of our code from here and moved it into the PCB creating an Update function
+	//I'm assuming we want this function to be called every clock tick, instead of managing the clock ticks insides the function
+
+	//my assumption is that the vector procs is already sorted by arrival time (the first time this function is called)
+	//and that after a process is done in the core it is put to the end of the line in procs
+	if (core->needsProcess()) {
+		//send the core the process that arrived first & is not waiting on IO
+		for (int i = 0; i < procs.size(); i++) {
+			if (!procs[i].isWaitingIO()) {
+				Process temp = core->Update(procs[i]);
+				procs.erase(procs.begin() + i);
+				break;
+			}
+		}
+
+		if (temp != NULL)
+			procs.push_back(temp);
+	} 
+	else {
+		//the core does not need a process so we pass it null
+		Process temp = core->Update(NULL);
+
+		if (temp != NULL)
+			procs.push_back(temp);
+	}
 }
-
-
 
 #endif

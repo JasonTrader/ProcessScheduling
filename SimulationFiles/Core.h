@@ -46,6 +46,10 @@ public:
 		return NULL;
 	}
 
+	bool needsProcess() {
+		return m_needs_process;
+	}
+
 /*#pragma region pre-empted functions
 	void SetPreemptionStatus(bool b) {
 		m_process_preempted = b;

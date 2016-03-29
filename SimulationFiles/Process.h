@@ -4,7 +4,6 @@
 #include <vector>
 #include <utility>
 
-
 class Process{
 private:
   int PID;
@@ -62,6 +61,17 @@ public:
   bool isDone(){
     return bursts.empty();
   }
+
+  bool isWaitingIO() {
+    if (burst[0].first == "IO" && burst[0].second <= 0) {
+      bursts.erase(bursts.begin());
+      return false;
+    }
+    else if (bursts[0].first == "IO")
+      return true;
+    return false;
+  }
+
 #pragma endregion
 
 
