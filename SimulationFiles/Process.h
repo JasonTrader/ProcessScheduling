@@ -52,15 +52,15 @@ public:
 
   void removeFrontBurst(){
     if(!bursts.empty()){
-      if(bursts[0].first == "CPU"){
-        bursts.erase(bursts.begin());
-      }
+      bursts.erase(bursts.begin());
     }
   }
 
   bool isDone(){
     return bursts.empty();
   }
+
+#pragma endregion
 
   bool isWaitingIO() {
     if (burst[0].first == "IO" && burst[0].second <= 0) {
@@ -71,8 +71,6 @@ public:
       return true;
     return false;
   }
-
-#pragma endregion
 
 
   unsigned int getWaitTime(unsigned int clockTime){
@@ -88,6 +86,16 @@ public:
       responded_to = true;
       response_time = (clockTime - arriv_time);
     }
+  }
+
+  bool hasBurstTimeLeft(){
+    if(bursts.empty()){
+      return false;
+    }
+    if(bursts[0].second > 0){
+      return true;
+    }
+    return false;
   }
 
 
