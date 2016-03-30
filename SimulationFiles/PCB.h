@@ -4,46 +4,48 @@
 #include "Core.h"
 #include <queue>
 #include <vector>
-#include "Scheduling.h"
-
-enum SCHED_TYPE { FCFS, RR, SPN, SRT, HRRN, Feedback};
+#include "GetNext.h"
 
 class PCB {
 private:
+	bool uniproc;
 	unsigned int sim_time;
 	vector<Process> unarrived_procs;
 	vector<Process> arrived_procs;
 	vector<Process> finished_procs;
-	vector<Core> cores;
+	vector<Core*> cores;
 	SCHED_TYPE sched_string;
-
-	void sortUnarrivedProcesses()) {
-		std::sort(unarrived_procs->begin(), unarrived_procs->end());
-	}
+	vector<Process> waitq;
 
 public:
-	PCB(std::vector<Process> procs, unsigned int sim_time, SCHED_TYPE sched_string, vector<Core> cores){
+	PCB(std::vector<Process> procs, unsigned int sim_time, SCHED_TYPE sched_string, unsigned int core_num, unsigned int quantum, bool uniproc){
 		this.procs = unarrived_procs;
 		this.sim_time = sim_time;
 		this.sched_string = sched_string;
-		this.cores = cores;
-
-		sortUnarrivedProcesses();
+		while(core_num--> 0){
+			cores.push_back(new Core());
+		}
+		this.uniproc = uniproc;
 	}
 
 	//runs one clock tick
 	void Update(unsigned int clock_int) {
 		//allow new processes to arrive
 		while (clock_int == unarrived_procs.front()->getArrivalTime()) {
-				arrived_procs.push_back(unarrived_procs.front());
-				unarrived_procs.erase(procs.begin());
+			arrived_procs.push_back(unarrived_procs.front());
+			unarrived_procs.erase(procs.begin());
 		}
 
-		//call scheduling function for one clock tick
-		switch(sched_string)
-		{
-			case FCFS : runFCFS(arrived_procs, cores[0]); break;
+		Process next = getNext(arrived_procs, sched_string, cores, quantum);
+		if(uniproc){
+			Process proc_ret = cores[0].Update(next);
+			if(!(proc_ret == NULL)){
+				if(proc_ret.hasBurstTimeLeft()){
+					arrived_procs.push_back(proc_ret);
+				}
+			}
 		}
+
 
 		//decrement burst for all processes waiting on IO burst AND check for finished_procs
 		for (int i = 0; i < arrived_procs.size(); i++) {
@@ -55,6 +57,7 @@ public:
 			if (arrived_procs[i].isDone()) {
 				finished_procs.push_back(arrived_procs[i]);
 				arrived_procs.erase(arrived_procs.begin() + i);
+				i--;
 			}
 		}
 }
