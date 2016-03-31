@@ -4,6 +4,7 @@
 #include "Core.h"
 #include <queue>
 #include <vector>
+#include <algorithm>
 #include "GetNext.h"
 
 class PCB {
@@ -20,6 +21,7 @@ private:
 public:
 	PCB(std::vector<Process> procs, unsigned int sim_time, SCHED_TYPE sched_string, unsigned int core_num, unsigned int quantum, bool uniproc){
 		this.procs = unarrived_procs;
+		std::sort(unarrived_procs.begin(), unarrived_procs.end()));
 		this.sim_time = sim_time;
 		this.sched_string = sched_string;
 		while(core_num--> 0){
@@ -31,7 +33,7 @@ public:
 	//runs one clock tick
 	void Update(unsigned int clock_int) {
 		//allow new processes to arrive
-		while (clock_int == unarrived_procs.front()->getArrivalTime()) {
+		while (clock_int == unarrived_procs.front().getArrivalTime()) {
 			arrived_procs.push_back(unarrived_procs.front());
 			unarrived_procs.erase(procs.begin());
 		}
@@ -39,7 +41,7 @@ public:
 		Process next = getNext(arrived_procs, sched_string, cores, quantum);
 		if(uniproc){
 			Process proc_ret = cores[0].Update(next);
-			if(!(proc_ret == NULL)){
+			if(proc_ret != NULL){
 				if(proc_ret.hasBurstTimeLeft()){
 					arrived_procs.push_back(proc_ret);
 				}
