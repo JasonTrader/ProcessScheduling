@@ -26,9 +26,9 @@ struct ProcData{
 
 	}
 
-	bool writeDataToFile() {
+	void writeDataToFile() {
 		std::ofstream proc_data;
-		proc_data.open("ProcessData" + std::to_string(PID) + ".txt");
+		proc_data.open("ProcessData.txt");
 		proc_data << clock_int << " " << PID << " " << arriv_time << " " << tot_burst_time << " " << turnaround_time << " "
 			<< wait_time << " " << response_time << "\n";
 	}

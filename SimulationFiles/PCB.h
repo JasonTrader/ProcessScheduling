@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include "GetNext.h"
+#include "ProcData.h"
 
 class PCB {
 private:
@@ -53,6 +54,8 @@ public:
 					proc_ret->removeFrontBurst();
 					if (proc_ret->isDone()) {
 						finished_procs.push_back(*proc_ret);
+						ProcData temp(*proc_ret, clock_int);
+						temp.writeDataToFile();
 					}
 					else {
 						waiting_procs.push_back(*proc_ret);
