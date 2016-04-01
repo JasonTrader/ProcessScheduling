@@ -11,23 +11,25 @@ class PCB {
 private:
 	bool uniproc;
 	unsigned int sim_time;
-	vector<Process> unarrived_procs;
-	vector<Process> arrived_procs;
-	vector<Process> finished_procs;
-	vector<Core*> cores;
+	unsigned int quantum;
+	std::vector<Process> unarrived_procs;
+	std::vector<Process> arrived_procs;
+	std::vector<Process> finished_procs;
+	std::vector<Core*> cores;
 	SCHED_TYPE sched_string;
-	vector<Process> waitq;
+	std::vector<Process> waitq;
 
 public:
-	PCB(std::vector<Process> procs, unsigned int sim_time, SCHED_TYPE sched_string, unsigned int core_num, unsigned int quantum, bool uniproc){
-		this.procs = unarrived_procs;
-		std::sort(unarrived_procs.begin(), unarrived_procs.end()));
-		this.sim_time = sim_time;
-		this.sched_string = sched_string;
-		while(core_num--> 0){
+	PCB(std::vector<Process> _procs, unsigned int _sim_time, SCHED_TYPE _sched_string, unsigned int _core_num, unsigned int _quantum, bool _uniproc) {
+		unarrived_procs = _procs;
+		std::sort(unarrived_procs.begin(), unarrived_procs.end());
+		sim_time = _sim_time;
+		sched_string = _sched_string;
+		while (_core_num-- > 0) {
 			cores.push_back(new Core());
 		}
-		this.uniproc = uniproc;
+		uniproc = _uniproc;
+		quantum = _quantum;
 	}
 
 	//runs one clock tick
@@ -35,22 +37,23 @@ public:
 		//allow new processes to arrive
 		while (clock_int == unarrived_procs.front().getArrivalTime()) {
 			arrived_procs.push_back(unarrived_procs.front());
-			unarrived_procs.erase(procs.begin());
+			unarrived_procs.erase(unarrived_procs.begin());
 		}
 
-		Process next = getNext(arrived_procs, sched_string, cores, quantum);
-		if(uniproc){
-			Process proc_ret = cores[0].Update(next);
-			if(proc_ret != NULL){
-				if(proc_ret.hasBurstTimeLeft()){
-					arrived_procs.push_back(proc_ret);
+		Process *next = getNext(arrived_procs, sched_string, cores[0], quantum);
+		if (uniproc) {
+			Process *proc_ret = new Process();
+			proc_ret = cores[0]->Update(*next);
+			if (proc_ret != NULL) {
+				if (proc_ret->hasBurstTimeLeft()) {
+					arrived_procs.push_back(*proc_ret);
 				}
 			}
 		}
 
 
 		//decrement burst for all processes waiting on IO burst AND check for finished_procs
-		for (int i = 0; i < arrived_procs.size(); i++) {
+		for (unsigned int i = 0; i < arrived_procs.size(); i++) {
 			if (arrived_procs[i].isWaitingIO())
 				arrived_procs[i].decBurstTimeLeft();
 
@@ -62,7 +65,7 @@ public:
 				i--;
 			}
 		}
-}
+	}
 
 	unsigned int getSimTime() {
 		return sim_time;
