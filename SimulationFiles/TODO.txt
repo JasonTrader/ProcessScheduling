@@ -4,3 +4,4 @@ TODO:
 2. Throw an error in default statement in switch in getNext
 3. Data recording in Procdata
 4. Check logic and memory leaks
+5. Implement unused clock tick data retrieval

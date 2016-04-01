@@ -15,6 +15,7 @@ private:
 	std::vector<Process> unarrived_procs;
 	std::vector<Process> arrived_procs;
 	std::vector<Process> finished_procs;
+	std::vector<Process> waiting_procs;
 	std::vector<Core*> cores;
 	SCHED_TYPE sched_string;
 	std::vector<Process> waitq;
@@ -48,20 +49,26 @@ public:
 				if (proc_ret->hasBurstTimeLeft()) {
 					arrived_procs.push_back(*proc_ret);
 				}
+				else {
+					proc_ret->removeFrontBurst();
+					if (proc_ret->isDone()) {
+						finished_procs.push_back(*proc_ret);
+					}
+					else {
+						waiting_procs.push_back(*proc_ret);
+					}
+				}
 			}
 		}
 
 
 		//decrement burst for all processes waiting on IO burst AND check for finished_procs
-		for (unsigned int i = 0; i < arrived_procs.size(); i++) {
-			if (arrived_procs[i].isWaitingIO())
-				arrived_procs[i].decBurstTimeLeft();
-
-			//Question: will this cause a process to be skipped when a process is removed from arrived_procs?
-			//I'm assuming so... which is a problem in this code.
-			if (arrived_procs[i].isDone()) {
-				finished_procs.push_back(arrived_procs[i]);
-				arrived_procs.erase(arrived_procs.begin() + i);
+		for (unsigned int i = 0; i < waiting_procs.size(); i++) {
+			if (waiting_procs[i].isWaitingIO())
+				waiting_procs[i].decBurstTimeLeft();
+			else {
+				arrived_procs.push_back(waiting_procs[i]);
+				waiting_procs.erase(waiting_procs.begin() + i);
 				i--;
 			}
 		}

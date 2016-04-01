@@ -16,6 +16,12 @@ private:
 
 public:
 
+#pragma region getters
+	unsigned int getPID() {
+		return PID;
+	}
+#pragma endregion
+
 	Process(unsigned int _PID, unsigned int _arriv_time, std::vector<std::pair<std::string, unsigned int>> _bursts) {
 		PID = _PID;
 		arriv_time = _arriv_time;
