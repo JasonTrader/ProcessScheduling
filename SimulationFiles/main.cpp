@@ -24,8 +24,8 @@ int main() {
 			istream_iterator<string> begin(ss);
 			istream_iterator<string> end;
 			vector<string> vstrings(begin, end);
-			
-			vector<pair<string, unsigned int>> bursts;
+
+			vector<pair<string, unsigned int> > bursts;
 			unsigned int PID = atoi(vstrings[0].c_str());
 			unsigned int arrival_time = atoi(vstrings[2].c_str());
 
@@ -44,13 +44,13 @@ int main() {
 		myfile.close();
 	}
 	else cout << "Unable to open data file :(" << endl;
-	
+
 	PCB pcb = PCB(procs, sim_time, sched_string, core_num, quantum, uniproc);
 
 	//start running simulation
 	for (unsigned int clock_int = 0; clock_int < pcb.getSimTime(); clock_int++) {
 		pcb.Update(clock_int);
-		if (clock_int % 1000 == 0) 
+		if (clock_int % 1000 == 0)
 			cout << "At clock int: " << clock_int << endl;
 	}
 

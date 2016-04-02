@@ -12,7 +12,7 @@ private:
 	unsigned int tot_burst_time;
 	unsigned int response_time;
 	bool responded_to;
-	std::vector<std::pair<std::string, unsigned int>> bursts;
+	std::vector<std::pair<std::string, unsigned int> > bursts;
 
 public:
 
@@ -22,7 +22,7 @@ public:
 	}
 #pragma endregion
 
-	Process(unsigned int _PID, unsigned int _arriv_time, std::vector<std::pair<std::string, unsigned int>> _bursts) {
+	Process(unsigned int _PID, unsigned int _arriv_time, std::vector<std::pair<std::string, unsigned int> > _bursts) {
 		PID = _PID;
 		arriv_time = _arriv_time;
 		bursts = _bursts;
