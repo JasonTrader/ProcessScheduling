@@ -5,40 +5,36 @@
 
 enum SCHED_TYPE { FCFS, RR, SPN, SRT, Feedback };
 
-Process* getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, unsigned int quantum) {
+int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, unsigned int quantum) {
 	if (procs_in_use.empty()) {
-		return NULL;
+		return -1;
 	}
 	switch (sched) {
 	case FCFS:
 		if (core->needsProcess()) {
-			Process *p = new Process();
-			*p = procs_in_use[0];
-			return p;
+			return 0;
 		}
-		return NULL;
+		return -1;
 		break;
 
 	case RR:
 		if (core->getCurrRunTime() < quantum && !(core->needsProcess())) {
-			return NULL;
+			return -1;
 		}
-		return &procs_in_use[0];
+		return 0;
 		break;
 
 	case SPN:
 		if (core->needsProcess()) {
-			Process *next_to_run = new Process();
+			next_to_run = 0;
 			for (unsigned int i = 0; i < procs_in_use.size(); i++) {
-				if (i == 0)
-					next_to_run = &procs_in_use[i];
-				if (next_to_run->getBurstTimeLeft() > procs_in_use[i].getBurstTimeLeft()) {
-					next_to_run = &procs_in_use[i];
+				if (procs_in_use[next_to_run].getBurstTimeLeft() > procs_in_use[i].getBurstTimeLeft()) {
+					next_to_run = i;
 				}
 			}
 			return next_to_run;
 		}
-		return NULL;
+		return -1;
 		break;
 
 	case SRT: // DOES NOT WORK RIGHT
