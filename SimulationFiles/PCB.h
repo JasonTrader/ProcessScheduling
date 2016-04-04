@@ -9,7 +9,6 @@
 
 class PCB {
 private:
-	bool uniproc;
 	unsigned int sim_time;
 	unsigned int quantum;
 	std::vector<Process> unarrived_procs;
@@ -23,7 +22,7 @@ private:
 
 public:
 
-	PCB(std::vector<Process> _procs, unsigned int _sim_time, SCHED_TYPE _sched_string, unsigned int _core_num, unsigned int _quantum, bool _uniproc, std::string _filename) {
+	PCB(std::vector<Process> _procs, unsigned int _sim_time, SCHED_TYPE _sched_string, unsigned int _core_num, unsigned int _quantum, std::string _filename) {
 		unarrived_procs = _procs;
 		std::sort(unarrived_procs.begin(), unarrived_procs.end());
 		sim_time = _sim_time;
@@ -53,16 +52,16 @@ public:
 				break;
 			}
 		}
-		int nextPlace = getNext(arrived_procs, sched_string, cores[0], quantum);
-		if (uniproc) {
+		for(int ci = 0; ci< cores.size(); ci++){
+			int nextPlace = getNext(arrived_procs, sched_string, cores[ci], quantum);
 			Process proc_ret;
 			if(nextPlace == -1){
 				Process myEmpty;
-				proc_ret = cores[0]->Update(myEmpty);
+				proc_ret = cores[ci]->Update(myEmpty);
 			}
 			else{
 				arrived_procs[nextPlace].setResponseTime(clock_int);
-				proc_ret = cores[0]->Update(arrived_procs[nextPlace]);
+				proc_ret = cores[ci]->Update(arrived_procs[nextPlace]);
 				arrived_procs.erase(arrived_procs.begin() + nextPlace);
 			}
 			if (!proc_ret.isEmpty()) {
