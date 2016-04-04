@@ -15,6 +15,8 @@ int main() {
 	string filename = "SRT.txt";
 	string file = "AddSRT.txt";
 
+	remove(file.c_str());
+	remove(filename.c_str());
 	string line;
 	ifstream myfile("data.txt");
 	if (myfile.is_open()) {

@@ -46,7 +46,7 @@ public:
 	//runs one clock tick
 	void Update(unsigned int clock_int) {
 		//allow new processes to arrive
-		while (clock_int == unarrived_procs.front().getArrivalTime()) {
+		while (!unarrived_procs.empty() && clock_int == unarrived_procs.front().getArrivalTime()) {
 			arrived_procs.push_back(unarrived_procs.front());
 			unarrived_procs.erase(unarrived_procs.begin());
 			if(unarrived_procs.empty()){
