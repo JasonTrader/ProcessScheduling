@@ -3,7 +3,6 @@
 
 #include "Core.h"
 #include <queue>
-#include <vector>
 #include <algorithm>
 #include "GetNext.h"
 #include "ProcData.h"
@@ -20,9 +19,10 @@ private:
 	std::vector<Core*> cores;
 	SCHED_TYPE sched_string;
 	std::vector<Process> waitq;
+	std::string filename;
 
 public:
-	PCB(std::vector<Process> _procs, unsigned int _sim_time, SCHED_TYPE _sched_string, unsigned int _core_num, unsigned int _quantum, bool _uniproc) {
+	PCB(std::vector<Process> _procs, unsigned int _sim_time, SCHED_TYPE _sched_string, unsigned int _core_num, unsigned int _quantum, bool _uniproc, std::string _filename) {
 		unarrived_procs = _procs;
 		std::sort(unarrived_procs.begin(), unarrived_procs.end());
 		sim_time = _sim_time;
@@ -32,8 +32,16 @@ public:
 		}
 		uniproc = _uniproc;
 		quantum = _quantum;
+		filename = _filename;
 	}
 
+#pragma region gettors and setters
+
+	unsigned int getSimTime() { return sim_time; }
+
+#pragma endregion
+
+#pragma region core functions
 	//runs one clock tick
 	void Update(unsigned int clock_int) {
 		//allow new processes to arrive
@@ -44,7 +52,6 @@ public:
 				break;
 			}
 		}
-
 		int nextPlace = getNext(arrived_procs, sched_string, cores[0], quantum);
 		if (uniproc) {
 			Process proc_ret;
@@ -65,7 +72,7 @@ public:
 					proc_ret.removeFrontBurst();
 					if (proc_ret.isDone()) {
 						finished_procs.push_back(proc_ret);
-						ProcData temp(proc_ret, clock_int);
+						ProcData temp(proc_ret, clock_int, filename);
 						temp.writeDataToFile();
 					}
 					else {
@@ -74,8 +81,6 @@ public:
 				}
 			}
 		}
-
-
 		//decrement burst for all processes waiting on IO burst AND check for finished_procs
 		for (unsigned int i = 0; i < waiting_procs.size(); i++) {
 			if (waiting_procs[i].isWaitingIO())
@@ -91,10 +96,16 @@ public:
 		}
 	}
 
-	unsigned int getSimTime() {
-		return sim_time;
+	void writeAdditionalData(std::string file) {
+		int empty_cycles = cores[0]->getUnusedCount();
+		int num_completed_procs = finished_procs.size();
+		std::fstream f;
+		f.open(file, std::ios::app);
+		f.seekg(std::ios_base::beg);
+		f << empty_cycles << " " << num_completed_procs << "\n";
+		f.close();
 	}
-
+#pragma endregion
 };
 
 #endif
