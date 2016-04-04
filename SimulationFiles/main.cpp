@@ -1,9 +1,5 @@
-#include <iostream>
 #include "PCB.h"
 #include <iterator>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <sstream>
 #include <stdio.h>
 using namespace std;
@@ -14,10 +10,11 @@ int main() {
 	unsigned int sim_time = 100000;
 	SCHED_TYPE sched_string = FCFS;
 	unsigned int core_num = 1;
-	unsigned int quantum = 20;
+	unsigned int quantum = 0;
 	bool uniproc = true;
+	string filename = "RRQ50.txt";
+	string file = "AddQ50.txt";
 
-	remove("ProcessData.txt");
 	string line;
 	ifstream myfile("data.txt");
 	if (myfile.is_open()) {
@@ -47,7 +44,7 @@ int main() {
 	}
 	else cout << "Unable to open data file :(" << endl;
 
-	PCB pcb = PCB(procs, sim_time, sched_string, core_num, quantum, uniproc);
+	PCB pcb = PCB(procs, sim_time, sched_string, core_num, quantum, uniproc, filename);
 
 	//start running simulation
 	for (unsigned int clock_int = 0; clock_int < pcb.getSimTime(); clock_int++) {
@@ -55,6 +52,7 @@ int main() {
 		if (clock_int % 1000 == 0)
 			cout << "At clock int: " << clock_int << endl;
 	}
+	pcb.writeAdditionalData(file);
 
 	return 0;
 }
