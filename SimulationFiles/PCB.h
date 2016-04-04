@@ -99,7 +99,10 @@ public:
 	}
 
 	void writeAdditionalData(std::string file) {
-		int empty_cycles = cores[0]->getUnusedCount();
+		int empty_cycles = 0;
+		for (int i = 0; i < cores.size(); i++) {
+			empty_cycles += cores[i]->getUnusedCount();
+		}
 		int num_completed_procs = finished_procs.size();
 		std::fstream f;
 		f.open(file, std::ios::app);

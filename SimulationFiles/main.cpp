@@ -11,22 +11,26 @@ using namespace std;
 //arg4 secondary output file name
 //arg5 input data file, NOTE must be well formed
 //arg6 number of cores, NOTE must be 1 for uniprocessor
-int main(int argc, char *argv) {
+int main(int argc, char *argv[]) {
 	vector<Process> procs;
 	//hard coded for now
 	unsigned int sim_time = 100000;
 	map<string, SCHED_TYPE> my_map;
 	my_map["FCFS"] = FCFS; my_map["RR"] = RR; my_map["SPN"] = SPN; my_map["SRT"] = SRT; my_map["Feedback"] = Feedback;
-	SCHED_TYPE sched_string = my_map[to_string(argv[1])];
-	unsigned int core_num = argv[6];
-	unsigned int quantum = argv[2];
-	string filename = to_string(argv[3]);
-	string file = to_string(argv[4]);
+	SCHED_TYPE sched_string = my_map[argv[1]];
+	unsigned int core_num = atoi(argv[6]);
+	unsigned int quantum = atoi(argv[2]);
+	string filename = argv[3];
+	string file = argv[4];
+	string infile = argv[5];
 
 	remove(file.c_str());
 	remove(filename.c_str());
 	string line;
-	ifstream myfile(to_string(argv[5]));
+	for (int i = 0; i < argc; i++) {
+		cout << argv[i] << " " << endl;
+	}
+	ifstream myfile(infile);
 	if (myfile.is_open()) {
 		while (getline(myfile, line)) {
 			istringstream ss(line);
