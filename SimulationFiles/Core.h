@@ -8,7 +8,9 @@ private:
 	bool m_needs_process;
 	unsigned int unused_count = 0;
 	unsigned int curr_run_time = 0;
+
 public:
+
 	Core() {
 		m_curr_process = Process();
 		m_needs_process = true;
@@ -26,6 +28,8 @@ public:
 
 	unsigned int getUnusedCount() { return unused_count; }
 
+	Process getProcess() { return m_curr_process; }
+
 #pragma endregion
 
 #pragma region core functions
@@ -38,6 +42,7 @@ public:
 			Process temp = m_curr_process;
 			m_curr_process = p;
 			m_needs_process = false;
+			unused_count++;
 			return temp;
 		}
 		if (m_curr_process.isEmpty()) {

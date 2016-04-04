@@ -22,6 +22,7 @@ private:
 	std::string filename;
 
 public:
+
 	PCB(std::vector<Process> _procs, unsigned int _sim_time, SCHED_TYPE _sched_string, unsigned int _core_num, unsigned int _quantum, bool _uniproc, std::string _filename) {
 		unarrived_procs = _procs;
 		std::sort(unarrived_procs.begin(), unarrived_procs.end());

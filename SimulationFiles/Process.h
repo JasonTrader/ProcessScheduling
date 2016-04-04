@@ -37,7 +37,7 @@ public:
 		return arriv_time < other.arriv_time;
 	}
 
-#pragma region getters and setters
+#pragma region gettors and setters
 
 	unsigned int getPID() { return PID; }
 
@@ -48,9 +48,9 @@ public:
 	unsigned int getTotBurst() { return tot_burst_time; }
 
 	unsigned int getBurstTimeLeft() {
-		if (!bursts.empty()) {
-			return bursts[0].second;
-		}
+		int ret;
+		(!bursts.empty()) ? ret = bursts[0].second : ret = 0;
+		return ret;
 	}
 
 	unsigned int getWaitTime(unsigned int clockTime) { return (clockTime - arriv_time) - tot_burst_time; }

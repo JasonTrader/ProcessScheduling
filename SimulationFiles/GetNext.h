@@ -1,10 +1,12 @@
 #ifndef __GETNEXT_H__
 #define __GETNEXT_H__
 #include <iostream>
+#include <climits>
 #include "Core.h"
 
 enum SCHED_TYPE { FCFS, RR, SPN, SRT, Feedback };
 
+//if nothing needs to be changed, return -1, if a new process needs into the core return 0
 int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, unsigned int quantum) {
 	if (procs_in_use.empty()) {
 		return -1;
@@ -38,18 +40,24 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 		return -1;
 		break;
 
-	/*case SRT: // DOES NOT WORK RIGHT
+	case SRT: // DOES NOT WORK RIGHT
 	{
-		Process *next_to_run = new Process();
-		for (unsigned int i = 0; i < procs_in_use.size(); i++) {
-			if (i == 0)
-				next_to_run = &procs_in_use[i];
-			if (next_to_run->getBurstTimeLeft() > procs_in_use[i].getBurstTimeLeft()) {
-				next_to_run = &procs_in_use[i];
+		int temp;
+		if (core->needsProcess()) {
+			temp = INT_MAX;
+		}
+		else {
+			temp = core->getProcess().getBurstTimeLeft();
+		}
+		next_to_run = -1;
+		for (int i = 0; i < procs_in_use.size(); i++) {
+			if (temp > procs_in_use[i].getBurstTimeLeft()) {
+				temp = procs_in_use[i].getBurstTimeLeft();
+				next_to_run = i;
 			}
 		}
 		return next_to_run;
-	}*/
+	}
 	default:
 		std::cout << "We Messed up somewhere" << std::endl;
 		return -1;

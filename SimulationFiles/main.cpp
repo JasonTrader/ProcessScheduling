@@ -8,12 +8,12 @@ int main() {
 	vector<Process> procs;
 	//hard coded for now
 	unsigned int sim_time = 100000;
-	SCHED_TYPE sched_string = FCFS;
+	SCHED_TYPE sched_string = SRT;
 	unsigned int core_num = 1;
-	unsigned int quantum = 0;
+	unsigned int quantum = 50;
 	bool uniproc = true;
-	string filename = "RRQ50.txt";
-	string file = "AddQ50.txt";
+	string filename = "SRT.txt";
+	string file = "AddSRT.txt";
 
 	string line;
 	ifstream myfile("data.txt");
