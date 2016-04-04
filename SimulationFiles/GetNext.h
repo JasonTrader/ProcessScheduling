@@ -2,6 +2,7 @@
 #define __GETNEXT_H__
 #include <iostream>
 #include <climits>
+#include <cmath>
 #include "Core.h"
 
 enum SCHED_TYPE { FCFS, RR, SPN, SRT, Feedback };
@@ -58,11 +59,31 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 		}
 		return next_to_run;
 	}
+
+	case Feedback:
+	{
+		if(!core->needsProcess() && pow(2, core->getProcess().getQueueLevel()) > core->getCurrRunTime()){
+			return -1;
+		}
+		else{
+			int minLevel = INT_MAX;
+			int minPos = 0;
+			for(int i = 0; i<procs_in_use.size(); i++){
+				if(procs_in_use[i].getQueueLevel() < minLevel){
+					minPos = i;
+					minLevel = procs_in_use[i].getQueueLevel();
+				}
+			}
+			return minPos;
+		}
+	}
+
 	default:
 		std::cout << "We Messed up somewhere" << std::endl;
 		return -1;
 		break;
 	}
 }
+
 
 #endif

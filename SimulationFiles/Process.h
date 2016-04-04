@@ -11,6 +11,7 @@ private:
 	unsigned int arriv_time;
 	unsigned int tot_burst_time;
 	unsigned int response_time;
+	unsigned int queue_level = 1;
 	bool responded_to = false;
 	bool empty_proc;
 	std::vector<std::pair<std::string, unsigned int> > bursts;
@@ -33,7 +34,7 @@ public:
 	}
 
 	//compares on arrival time
-	bool operator<(const Process &other) { 
+	bool operator<(const Process &other) {
 		return arriv_time < other.arriv_time;
 	}
 
@@ -64,7 +65,7 @@ public:
 		}
 	}
 #pragma endregion
-	
+
 #pragma region core functions
 
 	bool isEmpty() { return empty_proc; }
@@ -104,6 +105,15 @@ public:
 	}
 #pragma endregion
 
+	void addQueueLevel(){
+		if(queue_level < 6){
+			queue_level++;
+		}
+	}
+
+	unsigned int getQueueLevel(){
+		return queue_level;
+	}
 };
 
 #endif
