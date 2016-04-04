@@ -11,17 +11,11 @@ private:
 	unsigned int arriv_time;
 	unsigned int tot_burst_time;
 	unsigned int response_time;
-	bool responded_to;
+	bool responded_to = false;
 	bool empty_proc;
 	std::vector<std::pair<std::string, unsigned int> > bursts;
 
 public:
-
-#pragma region getters
-	unsigned int getPID() {
-		return PID;
-	}
-#pragma endregion
 
 	Process(unsigned int _PID, unsigned int _arriv_time, std::vector<std::pair<std::string, unsigned int> > _bursts) {
 		PID = _PID;
@@ -34,35 +28,48 @@ public:
 		empty_proc = false;
 	}
 
-	bool isEmpty(){
-		return empty_proc;
-	}
-
 	Process() {
 		empty_proc = true;
 	}
 
-	bool operator<(const Process &other) {//compares on arrival time
+	//compares on arrival time
+	bool operator<(const Process &other) { 
 		return arriv_time < other.arriv_time;
 	}
 
-	unsigned int getArrivalTime() {
-		return arriv_time;
-	}
-	unsigned int getTurnaroundTime(unsigned int clockTime) {
-		return clockTime - arriv_time;
-	}
+#pragma region getters and setters
 
-	unsigned int getTotBurst() {
-		return tot_burst_time;
-	}
+	unsigned int getPID() { return PID; }
 
-#pragma region core functions
+	unsigned int getArrivalTime() { return arriv_time; }
+
+	unsigned int getTurnaroundTime(unsigned int clockTime) { return clockTime - arriv_time; }
+
+	unsigned int getTotBurst() { return tot_burst_time; }
+
 	unsigned int getBurstTimeLeft() {
 		if (!bursts.empty()) {
 			return bursts[0].second;
 		}
 	}
+
+	unsigned int getWaitTime(unsigned int clockTime) { return (clockTime - arriv_time) - tot_burst_time; }
+
+	unsigned int getResponseTime() { return response_time; }
+
+	void setResponseTime(unsigned int clockTime) {
+		if (!responded_to) {
+			responded_to = true;
+			response_time = (clockTime - arriv_time);
+		}
+	}
+#pragma endregion
+	
+#pragma region core functions
+
+	bool isEmpty() { return empty_proc; }
+
+	bool isDone() { return bursts.empty(); }
 
 	void decBurstTimeLeft() {
 		if (!bursts.empty()) {
@@ -76,12 +83,6 @@ public:
 		}
 	}
 
-	bool isDone() {
-		return bursts.empty();
-	}
-
-#pragma endregion
-
 	bool isWaitingIO() {
 		if (bursts[0].first == "IO" && bursts[0].second <= 0) {
 			bursts.erase(bursts.begin());
@@ -90,22 +91,6 @@ public:
 		else if (bursts[0].first == "IO")
 			return true;
 		return false;
-	}
-
-
-	unsigned int getWaitTime(unsigned int clockTime) {
-		return (clockTime - arriv_time) - tot_burst_time;
-	}
-
-	unsigned int getResponseTime() {
-		return response_time;
-	}
-
-	void setResponseTime(unsigned int clockTime) {
-		if (!responded_to) {
-			responded_to = true;
-			response_time = (clockTime - arriv_time);
-		}
 	}
 
 	bool hasBurstTimeLeft() {
@@ -117,7 +102,7 @@ public:
 		}
 		return false;
 	}
-
+#pragma endregion
 
 };
 
