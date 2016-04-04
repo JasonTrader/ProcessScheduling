@@ -51,7 +51,7 @@ public:
 				break;
 			}
 		}
-		for(int ci = 0; ci< cores.size(); ci++){
+		for(unsigned int ci = 0; ci< cores.size(); ci++){
 			int nextPlace = getNext(arrived_procs, sched_string, cores[ci], quantum);
 			Process proc_ret;
 			if(nextPlace == -1){
@@ -100,7 +100,7 @@ public:
 
 	void writeAdditionalData(std::string file) {
 		int empty_cycles = 0;
-		for (int i = 0; i < cores.size(); i++) {
+		for (unsigned int i = 0; i < cores.size(); i++) {
 			empty_cycles += cores[i]->getUnusedCount();
 		}
 		int num_completed_procs = finished_procs.size();

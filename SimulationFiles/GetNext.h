@@ -51,7 +51,7 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 			temp = core->getProcess().getBurstTimeLeft();
 		}
 		next_to_run = -1;
-		for (int i = 0; i < procs_in_use.size(); i++) {
+		for (unsigned int i = 0; i < procs_in_use.size(); i++) {
 			if (temp > procs_in_use[i].getBurstTimeLeft()) {
 				temp = procs_in_use[i].getBurstTimeLeft();
 				next_to_run = i;
@@ -68,7 +68,7 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 		else{
 			int minLevel = INT_MAX;
 			int minPos = 0;
-			for(int i = 0; i<procs_in_use.size(); i++){
+			for(unsigned int i = 0; i<procs_in_use.size(); i++){
 				if(procs_in_use[i].getQueueLevel() < minLevel){
 					minPos = i;
 					minLevel = procs_in_use[i].getQueueLevel();
