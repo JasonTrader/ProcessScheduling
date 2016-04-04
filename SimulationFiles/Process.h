@@ -113,9 +113,6 @@ public:
 	}
 #pragma endregion
 
-	
-
-	
 };
 
 #endif

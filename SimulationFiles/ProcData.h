@@ -25,6 +25,7 @@ struct ProcData{
 		filename = _filename;
 
 	}
+
 #pragma region gettors and setters
 
 	std::string getFileName() { return filename; }
