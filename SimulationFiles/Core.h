@@ -8,15 +8,29 @@ private:
 	bool m_needs_process;
 	unsigned int unused_count = 0;
 	unsigned int curr_run_time = 0;
-	//bool m_process_preempted;
 public:
 	Core() {
 		m_curr_process = Process();
 		m_needs_process = true;
-		//m_process_preempted = false;
 	}
 
-	//runs one clock tick for a process argument should be passed as NULL if replacement is not desired
+#pragma region gettors and setters 
+
+	unsigned int getCurrRunTime() { return curr_run_time; }
+
+	unsigned int getProcBurstTimeLeft() {
+		if (!needsProcess()) {
+			return m_curr_process.getBurstTimeLeft();
+		}
+	}
+
+	unsigned int getUnusedCount() { return unused_count; }
+
+#pragma endregion
+
+#pragma region core functions
+
+	//runs one clock tick for a process argument will return empty process if not pre-empted or finished
 	Process Update(Process &p) {
 		//new process in, used for pre-emption/replacement
 		if (!p.isEmpty()) {
@@ -45,20 +59,9 @@ public:
 		return Process();
 	}
 
-	bool needsProcess() {
-		return m_needs_process;
-	}
+	bool needsProcess() { return m_needs_process; }
 
-	unsigned int getCurrRunTime() {
-		return curr_run_time;
-	}
-
-	unsigned int getProcBurstTimeLeft() {
-		if (!needsProcess()) {
-			return m_curr_process.getBurstTimeLeft();
-		}
-	}
-
+#pragma endregion
 
 };
 #endif
