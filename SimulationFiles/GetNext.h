@@ -40,7 +40,7 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 		return -1;
 		break;
 
-	case SRT: // DOES NOT WORK RIGHT
+	case SRT:
 	{
 		int temp;
 		if (core->needsProcess()) {
