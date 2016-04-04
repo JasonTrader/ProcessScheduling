@@ -12,6 +12,7 @@ private:
 	unsigned int tot_burst_time;
 	unsigned int response_time;
 	bool responded_to;
+	bool empty_proc;
 	std::vector<std::pair<std::string, unsigned int> > bursts;
 
 public:
@@ -30,10 +31,15 @@ public:
 		for (unsigned int i = 0; i < bursts.size(); i++) {
 			tot_burst_time += bursts[i].second;
 		}
+		empty_proc = false;
+	}
+
+	bool isEmpty(){
+		return empty_proc;
 	}
 
 	Process() {
-
+		empty_proc = true;
 	}
 
 	bool operator<(const Process &other) {//compares on arrival time

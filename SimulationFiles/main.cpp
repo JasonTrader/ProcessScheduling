@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <stdio.h>
 using namespace std;
 
 int main() {
@@ -16,6 +17,7 @@ int main() {
 	unsigned int quantum = 20;
 	bool uniproc = true;
 
+	remove("ProcessData.txt");
 	string line;
 	ifstream myfile("data.txt");
 	if (myfile.is_open()) {

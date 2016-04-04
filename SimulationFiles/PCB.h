@@ -40,25 +40,36 @@ public:
 		while (clock_int == unarrived_procs.front().getArrivalTime()) {
 			arrived_procs.push_back(unarrived_procs.front());
 			unarrived_procs.erase(unarrived_procs.begin());
+			if(unarrived_procs.empty()){
+				break;
+			}
 		}
 
-		Process *next = getNext(arrived_procs, sched_string, cores[0], quantum);
+		int nextPlace = getNext(arrived_procs, sched_string, cores[0], quantum);
 		if (uniproc) {
-			Process *proc_ret = new Process();
-			proc_ret = cores[0]->Update(*next);
-			if (proc_ret != NULL) {
-				if (proc_ret->hasBurstTimeLeft()) {
-					arrived_procs.push_back(*proc_ret);
+			Process proc_ret;
+			if(nextPlace == -1){
+				Process myEmpty;
+				proc_ret = cores[0]->Update(myEmpty);
+			}
+			else{
+				arrived_procs[nextPlace].setResponseTime(clock_int);
+				proc_ret = cores[0]->Update(arrived_procs[nextPlace]);
+				arrived_procs.erase(arrived_procs.begin() + nextPlace);
+			}
+			if (!proc_ret.isEmpty()) {
+				if (proc_ret.hasBurstTimeLeft()) {
+					arrived_procs.push_back(proc_ret);
 				}
 				else {
-					proc_ret->removeFrontBurst();
-					if (proc_ret->isDone()) {
-						finished_procs.push_back(*proc_ret);
-						ProcData temp(*proc_ret, clock_int);
+					proc_ret.removeFrontBurst();
+					if (proc_ret.isDone()) {
+						finished_procs.push_back(proc_ret);
+						ProcData temp(proc_ret, clock_int);
 						temp.writeDataToFile();
 					}
 					else {
-						waiting_procs.push_back(*proc_ret);
+						waiting_procs.push_back(proc_ret);
 					}
 				}
 			}
@@ -73,6 +84,9 @@ public:
 				arrived_procs.push_back(waiting_procs[i]);
 				waiting_procs.erase(waiting_procs.begin() + i);
 				i--;
+				if(i == waiting_procs.size()){
+					break;
+				}
 			}
 		}
 	}

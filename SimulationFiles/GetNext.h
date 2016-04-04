@@ -9,6 +9,7 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 	if (procs_in_use.empty()) {
 		return -1;
 	}
+	int next_to_run;
 	switch (sched) {
 	case FCFS:
 		if (core->needsProcess()) {
@@ -37,7 +38,7 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 		return -1;
 		break;
 
-	case SRT: // DOES NOT WORK RIGHT
+	/*case SRT: // DOES NOT WORK RIGHT
 	{
 		Process *next_to_run = new Process();
 		for (unsigned int i = 0; i < procs_in_use.size(); i++) {
@@ -48,10 +49,10 @@ int getNext(std::vector<Process> &procs_in_use, SCHED_TYPE sched, Core *core, un
 			}
 		}
 		return next_to_run;
-	}
+	}*/
 	default:
 		std::cout << "We Messed up somewhere" << std::endl;
-		return NULL;
+		return -1;
 		break;
 	}
 }
