@@ -58,6 +58,8 @@ public:
 
 	unsigned int getResponseTime() { return response_time; }
 
+	unsigned int getQueueLevel() { return queue_level; }
+
 	void setResponseTime(unsigned int clockTime) {
 		if (!responded_to) {
 			responded_to = true;
@@ -103,17 +105,17 @@ public:
 		}
 		return false;
 	}
-#pragma endregion
 
-	void addQueueLevel(){
-		if(queue_level < 6){
+	void addQueueLevel() {
+		if (queue_level < 6) {
 			queue_level++;
 		}
 	}
+#pragma endregion
 
-	unsigned int getQueueLevel(){
-		return queue_level;
-	}
+	
+
+	
 };
 
 #endif

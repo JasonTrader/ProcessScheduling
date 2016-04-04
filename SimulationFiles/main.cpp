@@ -8,12 +8,12 @@ int main() {
 	vector<Process> procs;
 	//hard coded for now
 	unsigned int sim_time = 100000;
-	SCHED_TYPE sched_string = SRT;
+	SCHED_TYPE sched_string = Feedback;
 	unsigned int core_num = 1;
 	unsigned int quantum = 50;
 	bool uniproc = true;
-	string filename = "SRT.txt";
-	string file = "AddSRT.txt";
+	string filename = "Feedback.txt";
+	string file = "AddFeedback.txt";
 
 	remove(file.c_str());
 	remove(filename.c_str());

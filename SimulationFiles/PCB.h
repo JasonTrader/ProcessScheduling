@@ -66,7 +66,7 @@ public:
 				arrived_procs.erase(arrived_procs.begin() + nextPlace);
 			}
 			if (!proc_ret.isEmpty()) {
-				if(sched_string == "Feedback"){
+				if(sched_string == Feedback){
 					proc_ret.addQueueLevel();
 				}
 				if (proc_ret.hasBurstTimeLeft()) {
