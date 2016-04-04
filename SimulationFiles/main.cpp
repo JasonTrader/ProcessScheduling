@@ -1,24 +1,32 @@
 #include "PCB.h"
 #include <iterator>
 #include <sstream>
+#include <map>
 #include <stdio.h>
 using namespace std;
 
-int main() {
+//arg1 scheduling algorithm
+//arg2 quantum, NOTE not all algorithms use quantum
+//arg3 primary output file name
+//arg4 secondary output file name
+//arg5 input data file, NOTE must be well formed
+//arg6 number of cores, NOTE must be 1 for uniprocessor
+int main(int argc, char *argv) {
 	vector<Process> procs;
 	//hard coded for now
 	unsigned int sim_time = 100000;
-	SCHED_TYPE sched_string = Feedback;
-	unsigned int core_num = 1;
-	unsigned int quantum = 50;
-	bool uniproc = true;
-	string filename = "Feedback.txt";
-	string file = "AddFeedback.txt";
+	map<string, SCHED_TYPE> my_map;
+	my_map["FCFS"] = FCFS; my_map["RR"] = RR; my_map["SPN"] = SPN; my_map["SRT"] = SRT; my_map["Feedback"] = Feedback;
+	SCHED_TYPE sched_string = my_map[to_string(argv[1])];
+	unsigned int core_num = argv[6];
+	unsigned int quantum = argv[2];
+	string filename = to_string(argv[3]);
+	string file = to_string(argv[4]);
 
 	remove(file.c_str());
 	remove(filename.c_str());
 	string line;
-	ifstream myfile("data.txt");
+	ifstream myfile(to_string(argv[5]));
 	if (myfile.is_open()) {
 		while (getline(myfile, line)) {
 			istringstream ss(line);
@@ -46,7 +54,7 @@ int main() {
 	}
 	else cout << "Unable to open data file :(" << endl;
 
-	PCB pcb = PCB(procs, sim_time, sched_string, core_num, quantum, uniproc, filename);
+	PCB pcb = PCB(procs, sim_time, sched_string, core_num, quantum, filename);
 
 	//start running simulation
 	for (unsigned int clock_int = 0; clock_int < pcb.getSimTime(); clock_int++) {

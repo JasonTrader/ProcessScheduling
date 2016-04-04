@@ -30,7 +30,6 @@ public:
 		while (_core_num-- > 0) {
 			cores.push_back(new Core());
 		}
-		uniproc = _uniproc;
 		quantum = _quantum;
 		filename = _filename;
 	}
